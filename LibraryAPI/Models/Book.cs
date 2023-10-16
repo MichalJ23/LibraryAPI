@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace LibraryAPI.Models
 {
@@ -7,7 +7,9 @@ namespace LibraryAPI.Models
         public int Id { get; set; }
         public string Title { get; set; }
         public string Author { get; set; }
-        public DateOnly PublishDate { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime PublishDate { get; set; }
         public string AvailableCopies { get; set; }
         public string TotalCopies { get; set; }
     }
