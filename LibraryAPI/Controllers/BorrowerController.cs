@@ -2,6 +2,7 @@
 using LibraryAPI.Dto;
 using LibraryAPI.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LibraryAPI.Controllers
 {
@@ -42,7 +43,7 @@ namespace LibraryAPI.Controllers
         {
             var borrowers = await _borrowerRepository.GetBorrowersAsync();
 
-            if (borrowers == null)
+            if (borrowers.IsNullOrEmpty())
             {
                 return NotFound("Borrowers not found");
             }

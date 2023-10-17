@@ -9,6 +9,7 @@ namespace LibraryAPI.Helpers
         public MappingProfiles()
         {
             CreateMap<Borrower, BorrowerDto>().ReverseMap();
+            CreateMap<Book, BookDto>().ReverseMap();
         }
     }
 }
