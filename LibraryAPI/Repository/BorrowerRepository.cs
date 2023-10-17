@@ -1,6 +1,7 @@
 ﻿using LibraryAPI.Data;
 using LibraryAPI.Interfaces;
 using LibraryAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryAPI.Repository
 {
@@ -11,31 +12,16 @@ namespace LibraryAPI.Repository
         {
             _context = context;
         }
-
-        public async Task<Borrower> AddBorrower(Borrower borrower)
+        public async Task<Borrower> GetBorrowerAsync(int id)
         {
-            await _context.Borrowers.AddAsync(borrower);
+            var borrower = await _context.Borrowers.FirstOrDefaultAsync(b => b.Id == id);
             return borrower;
         }
 
-        public Task<Borrower> DeleteBorrower(int id)
+        public async Task<IEnumerable<Borrower>> GetBorrowersAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Borrowers.ToListAsync();
         }
-
-        public Task<Borrower> GetBorrower(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Borrower>> GetBorrowers()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Borrower> UpdateBorrower(Borrower borrower)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<bool> BorrowerExistAsync(int id) => await _context.Borrowers.AnyAsync(b => b.Id == id);
     }
 }
