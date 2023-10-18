@@ -35,18 +35,18 @@ namespace LibraryAPI.Data
 
             var books = new List<Book>
             {
-                new Book { Title = "The Great Gatsby", Author = "F. Scott Fitzgerald", PublishDate = new DateTime(1925, 4, 10), AvailableCopies = "5", TotalCopies = "10" },
-                new Book { Title = "To Kill a Mockingbird", Author = "Harper Lee", PublishDate = new DateTime(1960, 7, 11), AvailableCopies = "3", TotalCopies = "8" },
-                new Book { Title = "Pride and Prejudice", Author = "Jane Austen", PublishDate = new DateTime(1813, 1, 28), AvailableCopies = "4", TotalCopies = "6" },
-                new Book { Title = "1984", Author = "George Orwell", PublishDate = new DateTime(1949, 6, 8), AvailableCopies = "2", TotalCopies = "5" },
+                new Book { Title = "The Great Gatsby", Author = "F. Scott Fitzgerald", PublishDate = new DateTime(1925, 4, 10), AvailableCopies = 5, TotalCopies = 10 },
+                new Book { Title = "To Kill a Mockingbird", Author = "Harper Lee", PublishDate = new DateTime(1960, 7, 11), AvailableCopies = 3, TotalCopies = 8 },
+                new Book { Title = "Pride and Prejudice", Author = "Jane Austen", PublishDate = new DateTime(1813, 1, 28), AvailableCopies = 4, TotalCopies = 6 },
+                new Book { Title = "1984", Author = "George Orwell", PublishDate = new DateTime(1949, 6, 8), AvailableCopies = 2, TotalCopies = 5 },
             };
 
             var rentals = new List<Rental>
             {
-                new Rental { DueDate = new DateTime(2023, 10, 30), Returned = false, Borrower = borrowers[0], Book = books[0] },
-                new Rental { DueDate = new DateTime(2023, 11, 15), Returned = false, Borrower = borrowers[1], Book = books[1] },
-                new Rental { DueDate = new DateTime(2023, 11, 5), Returned = false, Borrower = borrowers[2], Book = books[2] },
-                new Rental { DueDate = new DateTime(2023, 11, 20), Returned = false, Borrower = borrowers[3], Book = books[3] },
+                new Rental { RentalDate = new DateTime(2023, 10, 1), Returned = false, Borrower = borrowers[0], Book = books[0] },
+                new Rental { RentalDate = new DateTime(2023, 10, 15), Returned = false, Borrower = borrowers[1], Book = books[1] },
+                new Rental { RentalDate = new DateTime(2023, 10, 5), Returned = false, Borrower = borrowers[2], Book = books[2] },
+                new Rental { RentalDate = new DateTime(2023, 10, 20), Returned = false, Borrower = borrowers[3], Book = books[3] },
             };
 
             _context.AddRange(rentals);

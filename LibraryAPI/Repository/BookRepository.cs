@@ -29,5 +29,15 @@ namespace LibraryAPI.Repository
         }
 
         public async Task<IEnumerable<Book>> GetBooksAsync() => await _context.Books.ToListAsync();
+
+        public async Task<bool> ChcekIfBookIsAvaibleAsync(int id)
+        {
+            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
+
+            if (book == null || book.AvailableCopies == 0)
+                return false;
+
+            return true;
+        }
     }
 }

@@ -75,5 +75,16 @@ namespace LibraryAPI.Controllers
             var bookDto = _mapper.Map<BookDto>(book);
             return Ok(bookDto);
         }
+
+        [HttpGet("available/{bookId}")]
+        public async Task<IActionResult> CheckBookAvailability(int bookId)
+        {
+            var isAvailable = await _bookRepository.ChcekIfBookIsAvaibleAsync(bookId);
+
+            if (!isAvailable)
+                return BadRequest("Book is not available");
+
+            return Ok("Book is available");
+        }
     }
 }
