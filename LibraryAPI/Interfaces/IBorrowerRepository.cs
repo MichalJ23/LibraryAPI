@@ -11,5 +11,8 @@ namespace LibraryAPI.Interfaces
 
         //Post
         Task<Borrower> AddBorrowerAsync(Borrower borrower);
+
+        //Put
+        Task<Borrower> UpdateBorrowerAsync(Borrower borrower);
     }
 }

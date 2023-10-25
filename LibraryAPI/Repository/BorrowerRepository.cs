@@ -26,9 +26,24 @@ namespace LibraryAPI.Repository
 
         public async Task<Borrower> AddBorrowerAsync(Borrower borrower)
         {
-            await _context.Borrowers.AddAsync(borrower);
+            var result = await _context.Borrowers.AddAsync(borrower);
             await _context.SaveChangesAsync();
-            return borrower;
+            return result.Entity;
+        }
+
+        public async Task<Borrower> UpdateBorrowerAsync(Borrower borrower)
+        {
+            var borrowerEntity = await _context.Borrowers.FirstOrDefaultAsync(b => b.Id == borrower.Id);
+
+            if (borrowerEntity == null)
+                return null;
+
+            borrowerEntity.FirstName = borrower.FirstName;
+            borrowerEntity.LastName = borrower.LastName;
+
+            var result = _context.Borrowers.Update(borrowerEntity);
+            await _context.SaveChangesAsync();
+            return result.Entity;
         }
     }
 }

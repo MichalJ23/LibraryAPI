@@ -42,7 +42,7 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddContactInfoAsync([FromBody] ContactInfoDto createdContactInfo)
+        public async Task<ActionResult<ContactInfoDto>> AddContactInfoAsync([FromBody] ContactInfoDto createdContactInfo)
         {
             if (!ModelState.IsValid)
             {
@@ -51,8 +51,31 @@ namespace LibraryAPI.Controllers
 
             var contactInfo = _mapper.Map<ContactInfo>(createdContactInfo);
             var newContactInfo = await _contactInfoRepository.AddContactInfoAsync(contactInfo);
+            var contactInfoDto = _mapper.Map<ContactInfoDto>(newContactInfo);
 
-            return Ok(_mapper.Map<ContactInfoDto>(newContactInfo));
+            return CreatedAtAction(nameof(GetContactInfoByBorrowerId), contactInfoDto.Id, contactInfoDto);
+        }
+
+        [HttpPut("{infoId}")]
+        public async Task<ActionResult<ContactInfoDto>> UpdateContactInfoAsync([FromBody] ContactInfoDto contactInfoDto, int infoId)
+        {
+            if (contactInfoDto.Id != infoId)
+            {
+                return BadRequest("Id missmatch");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!await _contactInfoRepository.ContactInfoExistAsync(infoId))
+            {
+                return NotFound($"ContactInfo with {infoId} id not found");
+            }
+
+            var contactInfo = _mapper.Map<ContactInfo>(contactInfoDto);
+            await _contactInfoRepository.UpdateContactInfoAsync(contactInfo);
+            return NoContent();
         }
     }
 }

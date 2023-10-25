@@ -12,5 +12,8 @@ namespace LibraryAPI.Interfaces
         //Post 
         Task<ContactInfo> AddContactInfoAsync(ContactInfo contactInfo);
 
+        //Put
+        Task<ContactInfo> UpdateContactInfoAsync(ContactInfo contactInfo);
+
     }
 }

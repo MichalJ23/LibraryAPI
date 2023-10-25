@@ -77,5 +77,28 @@ namespace LibraryAPI.Controllers
 
             return Ok(borrower);
         }
+
+        [HttpPut("{borrowerId}")]
+        public async Task<IActionResult> UpdateBorrowerAsync(int borrowerId, [FromBody] BorrowerDto updatedBorrower)
+        {
+            if (borrowerId != updatedBorrower.Id)
+                return BadRequest("Borrower ID mismatch");
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!await _borrowerRepository.BorrowerExistAsync(borrowerId))
+            {
+                return NotFound($"Borrower with {borrowerId} not found");
+            }
+
+            var borrower = _mapper.Map<Borrower>(updatedBorrower);
+
+            await _borrowerRepository.UpdateBorrowerAsync(borrower);
+
+            return NoContent();
+        }
     }
 }

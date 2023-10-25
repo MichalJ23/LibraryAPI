@@ -113,5 +113,41 @@ namespace LibraryAPI.Controllers
 
             return CreatedAtAction(nameof(GetRentalById), new { rentalId = _mapper.Map<RentalDto>(addedRental).Id }, addedRental);
         }
+
+        [HttpPut("{rentalId}")]
+        public async Task<ActionResult> UpdateRentalAsync([FromBody] UpdateRentalDto updatedRental, int rentalId,
+            [FromQuery] int bookId, [FromQuery] int borrowerId)
+        {
+            if (updatedRental.Id != rentalId)
+            {
+                return BadRequest("Id missmatch");
+            }
+
+            if (!await _rentalRepository.CheckIfRentalExistAsync(rentalId))
+            {
+                return NotFound($"Rental with {rentalId} id not found");
+            }
+
+            if (!await _bookRepository.CheckIfBookExistAsync(bookId))
+            {
+                return NotFound($"Book with {bookId} id not found");
+            }
+
+            if (!await _borrowerRepository.BorrowerExistAsync(borrowerId))
+            {
+                return NotFound($"Borrower with {borrowerId} id not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var rental = _mapper.Map<Rental>(updatedRental);
+            rental.BorrowerId = borrowerId;
+            rental.BookId = bookId;
+            await _rentalRepository.UpdateRentalAsync(rental, bookId, rentalId);
+            return NoContent();
+        }
     }
 }

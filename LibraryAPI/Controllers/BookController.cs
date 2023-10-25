@@ -102,5 +102,24 @@ namespace LibraryAPI.Controllers
 
             return CreatedAtAction(nameof(GetBookByIdAsync), new { bookId = createdBookDto.Id }, createdBookDto);
         }
+
+        [HttpPut("{bookId}")]
+        public async Task<ActionResult<BookDto>> UpdateBookAsync([FromBody] BookDto updatedBook, int bookId)
+        {
+            if (updatedBook.Id != bookId)
+                return BadRequest("Book with Id mismatch");
+
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid model state");
+
+            if (!await _bookRepository.CheckIfBookExistAsync(bookId))
+                return NotFound($"Book with {bookId} Id not found");
+
+            var book = _mapper.Map<Book>(updatedBook);
+
+            await _bookRepository.UpdateBookAsync(book);
+
+            return NoContent();
+        }
     }
 }
