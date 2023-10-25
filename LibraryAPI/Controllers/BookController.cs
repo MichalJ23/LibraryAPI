@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LibraryAPI.Dto;
 using LibraryAPI.Interfaces;
+using LibraryAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -77,14 +78,29 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpGet("available/{bookId}")]
-        public async Task<IActionResult> CheckBookAvailability(int bookId)
+        public async Task<IActionResult> CheckBookAvailabilityAsync(int bookId)
         {
-            var isAvailable = await _bookRepository.ChcekIfBookIsAvaibleAsync(bookId);
+            var isAvailable = await _bookRepository.CheckIfBookIsAvaibleAsync(bookId);
 
             if (!isAvailable)
                 return BadRequest("Book is not available");
 
             return Ok("Book is available");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<BookDto>> AddBookAsync([FromBody] BookDto bookDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid model state");
+
+            var book = _mapper.Map<Book>(bookDto);
+
+            var createdBook = await _bookRepository.AddBookAsync(book);
+
+            var createdBookDto = _mapper.Map<BookDto>(createdBook);
+
+            return CreatedAtAction(nameof(GetBookByIdAsync), new { bookId = createdBookDto.Id }, createdBookDto);
         }
     }
 }

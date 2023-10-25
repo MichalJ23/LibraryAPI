@@ -30,14 +30,26 @@ namespace LibraryAPI.Repository
 
         public async Task<IEnumerable<Book>> GetBooksAsync() => await _context.Books.ToListAsync();
 
-        public async Task<bool> ChcekIfBookIsAvaibleAsync(int id)
+        public async Task<bool> CheckIfBookIsAvaibleAsync(int id)
         {
             var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
 
-            if (book == null || book.AvailableCopies == 0)
+            if (book == null || book.AvailableCopies <= 0)
                 return false;
 
             return true;
+        }
+
+        public async Task<bool> CheckIfBookExistAsync(int id)
+        {
+            return await _context.Books.AnyAsync(b => b.Id == id);
+        }
+
+        public async Task<Book> AddBookAsync(Book book)
+        {
+            await _context.AddAsync(book);
+            await _context.SaveChangesAsync();
+            return book;
         }
     }
 }

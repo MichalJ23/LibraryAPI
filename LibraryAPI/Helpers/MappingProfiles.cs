@@ -12,6 +12,7 @@ namespace LibraryAPI.Helpers
             CreateMap<Book, BookDto>().ReverseMap();
             CreateMap<ContactInfo, ContactInfoDto>().ReverseMap();
             CreateMap<Rental, RentalDto>().ReverseMap();
+            CreateMap<CreateRentalDto, Rental>().ReverseMap();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace LibraryAPI.Dto
 
         [DataType(DataType.Date)]
         public DateTime PublishDate { get; set; }
-        public string AvailableCopies { get; set; }
-        public string TotalCopies { get; set; }
+        public int AvailableCopies { get; set; }
+        public int TotalCopies { get; set; }
     }
 }

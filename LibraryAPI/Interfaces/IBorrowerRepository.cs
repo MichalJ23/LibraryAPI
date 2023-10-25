@@ -8,5 +8,8 @@ namespace LibraryAPI.Interfaces
         Task<IEnumerable<Borrower>> GetBorrowersAsync();
         Task<Borrower> GetBorrowerAsync(int id);
         Task<bool> BorrowerExistAsync(int id);
+
+        //Post
+        Task<Borrower> AddBorrowerAsync(Borrower borrower);
     }
 }

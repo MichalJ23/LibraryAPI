@@ -39,5 +39,16 @@ namespace LibraryAPI.Repository
         {
             return await _context.Rentals.ToListAsync();
         }
+
+        public async Task<Rental> AddRentalAsync(Rental rental)
+        {
+            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == rental.BookId);
+            book.AvailableCopies--;
+            var rentalDate = rental.RentalDate;
+            rental.DueDate = rentalDate.AddDays(30);
+            var result = await _context.Rentals.AddAsync(rental);
+            await _context.SaveChangesAsync();
+            return result.Entity;
+        }
     }
 }

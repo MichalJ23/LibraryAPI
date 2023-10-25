@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LibraryAPI.Dto;
 using LibraryAPI.Interfaces;
+using LibraryAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -12,10 +13,12 @@ namespace LibraryAPI.Controllers
     {
         private readonly IBorrowerRepository _borrowerRepository;
         private readonly IMapper _mapper;
-        public BorrowerController(IBorrowerRepository borrowerRepository, IMapper mapper)
+        private readonly IContactInfoRepository _contactInfoRepository;
+        public BorrowerController(IBorrowerRepository borrowerRepository, IMapper mapper, IContactInfoRepository contactInfoRepository)
         {
             _borrowerRepository = borrowerRepository;
             _mapper = mapper;
+            _contactInfoRepository = contactInfoRepository;
         }
 
         [HttpGet("{borrowerId}")]
@@ -51,6 +54,28 @@ namespace LibraryAPI.Controllers
             var borrowersDto = _mapper.Map<IEnumerable<BorrowerDto>>(borrowers);
 
             return Ok(borrowersDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddBorrowerAsync([FromBody] BorrowerDto createdBorrower, [FromQuery] int contactInfoId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!await _contactInfoRepository.ContactInfoExistAsync(contactInfoId))
+            {
+                return NotFound("ContactInfo not found");
+            }
+
+            var borrower = _mapper.Map<Borrower>(createdBorrower);
+
+            borrower.ContactInfoId = contactInfoId;
+
+            await _borrowerRepository.AddBorrowerAsync(borrower);
+
+            return Ok(borrower);
         }
     }
 }

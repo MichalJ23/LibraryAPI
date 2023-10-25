@@ -9,6 +9,10 @@ namespace LibraryAPI.Interfaces
         Task<Book> GetBookByIdAsync(int id);
         Task<Book> GetBookByTitleAsync(string title);
         Task<IEnumerable<Book>> GetBooksByAuthorAsync(string author);
-        Task<bool> ChcekIfBookIsAvaibleAsync(int id);
+        Task<bool> CheckIfBookIsAvaibleAsync(int id);
+        Task<bool> CheckIfBookExistAsync(int id);
+
+        //Post
+        Task<Book> AddBookAsync(Book book);
     }
 }

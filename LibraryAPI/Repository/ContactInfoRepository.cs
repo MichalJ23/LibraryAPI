@@ -20,5 +20,22 @@ namespace LibraryAPI.Repository
                 .FirstOrDefaultAsync();
             return contactInfo;
         }
+
+        public async Task<IEnumerable<ContactInfo>> GetContactInfosAsync()
+        {
+            return await _context.ContactInfos.ToListAsync();
+        }
+
+        public async Task<ContactInfo> AddContactInfoAsync(ContactInfo contactInfo)
+        {
+            await _context.ContactInfos.AddAsync(contactInfo);
+            await _context.SaveChangesAsync();
+            return contactInfo;
+        }
+
+        public async Task<bool> ContactInfoExistAsync(int id)
+        {
+            return await _context.ContactInfos.AnyAsync(c => c.Id == id);
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LibraryAPI.Dto;
 using LibraryAPI.Interfaces;
+using LibraryAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -12,9 +13,15 @@ namespace LibraryAPI.Controllers
     {
         private readonly IRentalRepository _rentalRepository;
         private readonly IMapper _mapper;
-        public RentalController(IRentalRepository rentalRepository, IMapper mapper)
+        private readonly IBookRepository _bookRepository;
+        private readonly IBorrowerRepository _borrowerRepository;
+
+        public RentalController(IRentalRepository rentalRepository, IMapper mapper, IBookRepository bookRepository,
+            IBorrowerRepository borrowerRepository)
         {
             _mapper = mapper;
+            _bookRepository = bookRepository;
+            _borrowerRepository = borrowerRepository;
             _rentalRepository = rentalRepository;
         }
 
@@ -73,6 +80,38 @@ namespace LibraryAPI.Controllers
 
             var rentalsDto = _mapper.Map<IEnumerable<RentalDto>>(rentals);
             return Ok(rentalsDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddRentalAsync([FromBody] CreateRentalDto createdRental, int bookId, int borrowerId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!await _bookRepository.CheckIfBookExistAsync(bookId))
+            {
+                ModelState.AddModelError("", "Book does not exist ");
+                return NotFound(ModelState);
+            }
+
+            if (!await _borrowerRepository.BorrowerExistAsync(borrowerId))
+            {
+                ModelState.AddModelError("", "Borrower does not exist");
+                return NotFound(ModelState);
+            }
+
+            if (!await _bookRepository.CheckIfBookIsAvaibleAsync(bookId))
+            {
+                ModelState.AddModelError("", "Book is not avaible");
+                return NotFound(ModelState);
+            }
+
+            var rental = _mapper.Map<Rental>(createdRental);
+            rental.BookId = bookId;
+            rental.BorrowerId = borrowerId;
+            var addedRental = await _rentalRepository.AddRentalAsync(rental);
+
+            return CreatedAtAction(nameof(GetRentalById), new { rentalId = _mapper.Map<RentalDto>(addedRental).Id }, addedRental);
         }
     }
 }
