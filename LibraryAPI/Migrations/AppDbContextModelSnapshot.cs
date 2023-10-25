@@ -34,9 +34,8 @@ namespace LibraryAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("AvailableCopies")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("AvailableCopies")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("PublishDate")
                         .HasColumnType("datetime2");
@@ -45,9 +44,8 @@ namespace LibraryAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TotalCopies")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TotalCopies")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -116,6 +114,9 @@ namespace LibraryAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("RentalDate")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Returned")

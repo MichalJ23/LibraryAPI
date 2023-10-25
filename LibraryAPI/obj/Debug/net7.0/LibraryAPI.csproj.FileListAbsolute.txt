@@ -74,3 +74,5 @@ C:\Users\MJ\source\repos\LibraryAPI\LibraryAPI\obj\Debug\net7.0\refint\LibraryAP
 C:\Users\MJ\source\repos\LibraryAPI\LibraryAPI\obj\Debug\net7.0\LibraryAPI.pdb
 C:\Users\MJ\source\repos\LibraryAPI\LibraryAPI\obj\Debug\net7.0\LibraryAPI.genruntimeconfig.cache
 C:\Users\MJ\source\repos\LibraryAPI\LibraryAPI\obj\Debug\net7.0\ref\LibraryAPI.dll
+C:\Users\MJ\source\repos\LibraryAPI\LibraryAPI\bin\Debug\net7.0\AutoMapper.dll
+C:\Users\MJ\source\repos\LibraryAPI\LibraryAPI\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
