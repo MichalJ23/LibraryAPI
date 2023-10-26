@@ -73,5 +73,17 @@ namespace LibraryAPI.Repository
             await _context.SaveChangesAsync();
             return result.Entity;
         }
+
+        public async Task DeleteRentalAsync(int id)
+        {
+            var result = await _context.Rentals.FirstOrDefaultAsync(r => r.Id == id);
+            if (result == null) return;
+            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == result.BookId);
+            if (book != null)
+                book.AvailableCopies++;
+
+            _context.Rentals.Remove(result);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -16,5 +16,8 @@ namespace LibraryAPI.Interfaces
 
         //Put
         Task<Rental> UpdateRentalAsync(Rental rental, int bookId, int borrowerId);
+
+        //Delete
+        Task DeleteRentalAsync(int id);
     }
 }

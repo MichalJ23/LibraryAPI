@@ -149,5 +149,15 @@ namespace LibraryAPI.Controllers
             await _rentalRepository.UpdateRentalAsync(rental, bookId, rentalId);
             return NoContent();
         }
+
+        [HttpDelete("{rentalId}")]
+        public async Task<ActionResult> DeleteRentalAsync(int rentalId)
+        {
+            if (!await _rentalRepository.CheckIfRentalExistAsync(rentalId))
+                return NotFound("Rental not found");
+
+            await _rentalRepository.DeleteRentalAsync(rentalId);
+            return NoContent();
+        }
     }
 }

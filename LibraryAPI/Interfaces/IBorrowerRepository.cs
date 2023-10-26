@@ -14,5 +14,8 @@ namespace LibraryAPI.Interfaces
 
         //Put
         Task<Borrower> UpdateBorrowerAsync(Borrower borrower);
+
+        //Delete
+        Task DeleteBorrowerAsync(int id);
     }
 }

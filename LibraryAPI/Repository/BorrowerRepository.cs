@@ -45,5 +45,17 @@ namespace LibraryAPI.Repository
             await _context.SaveChangesAsync();
             return result.Entity;
         }
+
+        public async Task DeleteBorrowerAsync(int id)
+        {
+            var result = await _context.Borrowers.FirstOrDefaultAsync(b => b.Id == id);
+            if (result == null) return;
+
+            var contactInfo = result.ContactInfo;
+            if (contactInfo != null)
+                _context.Remove(contactInfo);
+            _context.Borrowers.Remove(result);
+            await _context.SaveChangesAsync();
+        }
     }
 }

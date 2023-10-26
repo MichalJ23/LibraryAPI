@@ -100,5 +100,15 @@ namespace LibraryAPI.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{borrowerId}")]
+        public async Task<ActionResult> DeleteBorrowerAsync(int borrowerId)
+        {
+            if (!await _borrowerRepository.BorrowerExistAsync(borrowerId))
+                return NotFound("Borrower not found");
+
+            await _borrowerRepository.DeleteBorrowerAsync(borrowerId);
+            return NoContent();
+        }
     }
 }

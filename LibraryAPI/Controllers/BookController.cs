@@ -121,5 +121,15 @@ namespace LibraryAPI.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{bookId}")]
+        public async Task<ActionResult> DeleteBookAsync(int bookId)
+        {
+            if (!await _bookRepository.CheckIfBookExistAsync(bookId))
+                return NotFound("Book not found");
+
+            await _bookRepository.DeleteBookAsync(bookId);
+            return NoContent();
+        }
     }
 }
