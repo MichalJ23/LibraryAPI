@@ -40,6 +40,11 @@ namespace LibraryAPI.Repository
             return await _context.Rentals.ToListAsync();
         }
 
+        public async Task<bool> CheckIfRentalExistAsync(int id)
+        {
+            return await _context.Rentals.AnyAsync(r => r.Id == id);
+        }
+
         public async Task<Rental> AddRentalAsync(Rental rental)
         {
             var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == rental.BookId);
@@ -49,6 +54,36 @@ namespace LibraryAPI.Repository
             var result = await _context.Rentals.AddAsync(rental);
             await _context.SaveChangesAsync();
             return result.Entity;
+        }
+
+        public async Task<Rental> UpdateRentalAsync(Rental rental, int bookId, int borrowerId)
+        {
+            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == bookId);
+            var borrower = await _context.Borrowers.FirstOrDefaultAsync(b => b.Id == borrowerId);
+
+            if (rental.Returned)
+            {
+                book.AvailableCopies++;
+            }
+
+            rental.Borrower = borrower;
+            rental.Book = book;
+
+            var result = _context.Update(rental);
+            await _context.SaveChangesAsync();
+            return result.Entity;
+        }
+
+        public async Task DeleteRentalAsync(int id)
+        {
+            var result = await _context.Rentals.FirstOrDefaultAsync(r => r.Id == id);
+            if (result == null) return;
+            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == result.BookId);
+            if (book != null)
+                book.AvailableCopies++;
+
+            _context.Rentals.Remove(result);
+            await _context.SaveChangesAsync();
         }
     }
 }

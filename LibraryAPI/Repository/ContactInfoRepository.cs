@@ -28,14 +28,29 @@ namespace LibraryAPI.Repository
 
         public async Task<ContactInfo> AddContactInfoAsync(ContactInfo contactInfo)
         {
-            await _context.ContactInfos.AddAsync(contactInfo);
+            var result = await _context.ContactInfos.AddAsync(contactInfo);
             await _context.SaveChangesAsync();
-            return contactInfo;
+            return result.Entity;
         }
 
         public async Task<bool> ContactInfoExistAsync(int id)
         {
             return await _context.ContactInfos.AnyAsync(c => c.Id == id);
+        }
+
+        public async Task<ContactInfo> UpdateContactInfoAsync(ContactInfo contactInfo)
+        {
+            var contactInfoEntity = await _context.ContactInfos.FirstOrDefaultAsync(c => c.Id == contactInfo.Id);
+
+            if (contactInfoEntity == null)
+                return null;
+
+            contactInfoEntity.Email = contactInfo.Email;
+            contactInfoEntity.Phone = contactInfo.Phone;
+
+            var result = _context.ContactInfos.Update(contactInfoEntity);
+            await _context.SaveChangesAsync();
+            return result.Entity;
         }
     }
 }

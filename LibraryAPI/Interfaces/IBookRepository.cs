@@ -14,5 +14,11 @@ namespace LibraryAPI.Interfaces
 
         //Post
         Task<Book> AddBookAsync(Book book);
+
+        //Put
+        Task<Book> UpdateBookAsync(Book book);
+
+        //Delete
+        Task DeleteBookAsync(int id);
     }
 }
